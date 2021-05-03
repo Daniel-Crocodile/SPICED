@@ -1,0 +1,40 @@
+version: '3.1'
+services:
+
+  mongod
+    image: mongo
+    ports:
+    - 27017:27017
+
+  collector:
+    build: collector/
+    volumes:
+    - ./collector/:/app
+    depends_on:
+    - mongodb
+ 
+  postgresdb:
+    image: postgres:12.6
+    ports:
+    - "5555:5432"
+    environment:
+    - USER=postgres
+    - PASS=3377
+    - DB=polarity_sent 
+
+  etl:
+    build: etl/
+    volumes:
+    - ./etl/:/app  
+    depends_on: 
+    - postgresdb
+    - mongodb
+
+  bot:
+    build: bot/
+    volumes:
+    - ./bot/:/app  
+    depends_on:
+    - postgresdb
+    
+    

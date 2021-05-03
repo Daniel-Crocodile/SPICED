@@ -1,0 +1,4 @@
+telegram
+telepot
+sqlalchemy
+psycopg2
